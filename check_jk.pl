@@ -50,7 +50,7 @@ sub read_configuration {
 }
 
 sub run_nagios {
-    $_[0] =~ /([\w\/]+)\s/g;
+    $_[0] =~ /([\w\/]+)\s?/g;
     if ( !-x $1 ) { return ( 2, "$_[1] not executable\n" ); }
     open NG, "$_[0] |" or return (2, "error running command $!");
     my @data = <NG>;
