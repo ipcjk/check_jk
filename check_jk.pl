@@ -51,7 +51,7 @@ sub read_configuration {
 
 sub run_nagios {
     $_[0] =~ /([\w\/]+)\s?/g;
-    if ( $1 !~ /^sudo/ && !-x $1 ) { die $_[0]; return ( 2, "$_[1] not executable\n" ); }
+    if ( $1 !~ /^sudo/ && !-x $1 ) { return ( 2, "$_[1] not executable\n" ); }
     open NG, "$_[0] |" or return (2, "error running command $!");
     my @data = <NG>;
     my $scal = join( ",", @data );
