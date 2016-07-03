@@ -39,8 +39,8 @@ my $summary = "summary of $count [$CROSS_TABLE{0} Good, $CROSS_TABLE{1} Failing,
 
 print 'CRITICAL: No checks found' if $count == 0;
 print "Everything OK: $summary"             if $collector_return == 0 && $count > 0;
-print "WARNING: $summary, last warning: $collector"                if $collector_return == 1;
-print "CRITICAL: $summary, last critical: $collector"                if $collector_return == 2;
+print "WARNING: $summary, issues:$collector"                if $collector_return == 1;
+print "CRITICAL: $summary, issues:$collector"                if $collector_return == 2;
 
 exit $collector_return;
 
