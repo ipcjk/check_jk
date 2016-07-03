@@ -29,7 +29,7 @@ foreach ( keys(%checks) ) {
     if ( $ex > 0 ) {
         $collector_return = $ex if $ex > $collector_return;
         chomp $data;
-        $collector .= ", $data";
+        $collector .= " [$_: $data]";
     }
     $CROSS_TABLE{$ex}++;
     $count++;
