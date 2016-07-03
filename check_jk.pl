@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# Released under the GNU General Public License
+# Released under the GNU General Public License v2
 # Jörg Kost joerg.kost@gmx.com
 
 use strict;
@@ -18,18 +18,27 @@ read_configuration(
     )
 );
 
+my %CROSS_TABLE = (
+    0 => 0,
+    1 => 0,
+    2 => 0
+    );
+
 foreach ( keys(%checks) ) {
     my ( $ex, $data ) = run_nagios( $checks{$_}, $_ );
     if ( $ex > 0 ) {
         $collector_return = $ex if $ex > $collector_return;
         $collector .= $data;
     }
+    $CROSS_TABLE{$ex}++;
     $count++;
 }
 
+my $summary = "summary of $count [$CROSS_TABLE{0} Good, $CROSS_TABLE{1} Failing, $CROSS_TABLE{2} Damaged]";
+
 print 'CRITICAL: No checks found' if $count == 0;
-print 'Everything OK'             if $collector_return == 0 && $count > 0;
-print "WARNING: $collector"                if $collector_return != 0;
+print "Everything OK: $summary"             if $collector_return == 0 && $count > 0;
+print "WARNING: $summary, last warning: $collector"                if $collector_return != 0;
 exit $collector_return;
 
 sub read_configuration {
