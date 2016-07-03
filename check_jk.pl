@@ -28,7 +28,8 @@ foreach ( keys(%checks) ) {
     my ( $ex, $data ) = run_nagios( $checks{$_}, $_ );
     if ( $ex > 0 ) {
         $collector_return = $ex if $ex > $collector_return;
-        $collector .= $data;
+        chomp $data;
+        $collector .= ", $data";
     }
     $CROSS_TABLE{$ex}++;
     $count++;
@@ -38,7 +39,9 @@ my $summary = "summary of $count [$CROSS_TABLE{0} Good, $CROSS_TABLE{1} Failing,
 
 print 'CRITICAL: No checks found' if $count == 0;
 print "Everything OK: $summary"             if $collector_return == 0 && $count > 0;
-print "WARNING: $summary, last warning: $collector"                if $collector_return != 0;
+print "WARNING: $summary, last warning: $collector"                if $collector_return == 1;
+print "CRITICAL: $summary, last critical: $collector"                if $collector_return == 2;
+
 exit $collector_return;
 
 sub read_configuration {
